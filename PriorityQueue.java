@@ -1,7 +1,7 @@
 
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Nicole Kozuch / Section 002
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -150,9 +150,10 @@ class PriorityQueue<E, P> {
      */
 
     public Node add(E e, P priority) {
-
-        // YOUR CODE GOES HERE
-        return null;
+        Node newNode = new Node(e, priority, tree.size());
+        tree.add(newNode);
+        pullUp(tree.size() - 1); // Reheap by pulling up node to correct location
+        return newNode;
     }
 
 
@@ -167,8 +168,11 @@ class PriorityQueue<E, P> {
      */
 
     public boolean contains(E e) {
-
-        // ADD YOUR CODE HERE
+        for (Node node : tree) {
+            if (node.value.equals(e)) {
+                return true; 
+            }
+        }
         return false;
     }
 

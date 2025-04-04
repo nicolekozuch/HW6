@@ -1,7 +1,7 @@
 
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Nicole Kozuch / Section 002
  *
  *   This java file contains the problem solutions for the methods lastBoulder,
  *   showDuplicates, and pair methods. You should utilize the Java Collection
@@ -63,13 +63,30 @@ public class ProblemSolutions {
      * returning the 0 if queue is empty else return pq.peek().
      */
 
-  public static int lastBoulder(int[] boulders) {
+    public static int lastBoulder(int[] boulders) {
+        // Create a max heap for easy retrieval of heaviest boulders
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
 
-      //
-      // ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME / SECTION # ABOVE
-      //
-      return -1;
-  }
+        // Copy boulders into the heap
+        for (int boulder : boulders) {
+            pq.add(boulder);
+        }
+
+        // Continues rounds of smashing while priority queue has at least 2 boulders
+        while (pq.size() >= 2) {
+            // Get the first and second heaviest boulders
+            int boulder1 = pq.poll();
+            int boulder2 = pq.poll();
+
+            // Check boulders' weights, destroying the first boulder and updating weight of second boulder
+            if (boulder1 != boulder2) {
+                pq.offer(Math.abs(boulder2 - boulder1));
+            }
+        }
+
+        // Returns weight of the last boulder, or 0 if none left
+        return (!pq.isEmpty()) ? pq.peek() : 0;
+    }
 
 
     /**
@@ -90,11 +107,28 @@ public class ProblemSolutions {
      */
 
     public static ArrayList<String> showDuplicates(ArrayList<String> input) {
+        ArrayList<String> duplicates = new ArrayList<>();
+        Map<String, Integer> frequency = new HashMap<>();
 
-        //
-        //  YOUR CODE GOES HERE
-        //
-        return new ArrayList<>();  // Make sure result is sorted in ascending order
+
+        // Adds elements from input array into hash map, counting number of times each string appears
+        for (String elem : input) {
+            frequency.put(elem, frequency.getOrDefault(elem, 0) + 1);
+        }
+        
+        // Iterates through hash map, checking for strings that appear more than once
+        for (Map.Entry<String, Integer> strings : frequency.entrySet()) {
+            String elem = strings.getKey();
+            Integer count = strings.getValue();
+            if (count > 1) {
+                duplicates.add(elem);
+            }
+        }
+
+        // Sorts ArrayList in ascending order before returning
+        Collections.sort(duplicates);
+       
+        return duplicates;
 
     }
 
@@ -130,10 +164,30 @@ public class ProblemSolutions {
      */
 
     public static ArrayList<String> pair(int[] input, int k) {
+        ArrayList<String> orderedPairs = new ArrayList<>();
+        Set<Integer> lookup = new HashSet<>();
+        Set<String> uniquePairs = new HashSet<>();
 
-        //
-        //  YOUR CODE GOES HERE
-        //
-        return new ArrayList<>();  // Make sure returned lists is sorted as indicated above
+        for (int elem : input) {
+            int complement = k - elem;
+            if (lookup.contains(complement)) {
+                int min = Math.min(complement, elem);
+                int max = Math.max(complement, elem);
+                // Create pair, ordered smallest to largest 
+                String pair = ("(" + min + ", " + max + ")");
+                
+                // Check if pair currently exists, adding it if not
+                if (!uniquePairs.contains(pair)) {
+                    uniquePairs.add(pair);
+                }
+            }
+            lookup.add(elem);
+        }
+
+        orderedPairs.addAll(uniquePairs);
+        // Sorts pairs in ascending order before returning
+        Collections.sort(orderedPairs);
+
+        return orderedPairs;
     }
 }
